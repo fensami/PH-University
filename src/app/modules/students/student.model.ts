@@ -132,7 +132,16 @@ studentSchema.statics.isUserExists = async function (id: string) {
   return existiongUser;
 }
 
+// // Virtual 
+// studentSchema.virtual('fullName').get(function () {
+//   return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
+// })
 
+// // Query Midlleware
+// studentSchema.pre('find', function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next()
+// })
 
 
 

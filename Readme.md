@@ -10,35 +10,43 @@ npm init -y
 ```
 npm add express
 ```
+
 ## mongoose Install
+
 ```
 https://mongoosejs.com/docs/
 ```
+
 ## mongoose Install command
+
 ```
 npm install mongoose --save
 
 ```
 
 ## Cors Install link
+
 ```
 https://www.npmjs.com/package/cors
 ```
+
 ## Cors Install Command
+
 ```
 npm i cors
 ```
+
 ## dotend install link
+
 ```
 https://www.npmjs.com/package/dotenv
 ```
 
 ## dotend install command
+
 ```
 npm i dotenv
 ```
-
-
 
 ## Install Typescript
 
@@ -47,6 +55,7 @@ npm i dotenv
 ```
 
 ## Typescript Compiler
+
 ```
 tsc --init
 
@@ -59,13 +68,16 @@ tsc --init
 ```
 npm add -D @types/node
 ```
+
 ## Install type express
+
 ```
 npm i --save-dev @types/express
 
 ```
 
 ## typescript compiler command
+
 ```
 tsc -w
 ```
@@ -78,17 +90,19 @@ npm add -D nodemon
 ```
 
 ## nodemon run this command
+
 ```
 nodemon ./pathname
 ```
 
-## api testing tool 
+## api testing tool
 
 ```
 https://www.postman.com/downloads/
 ```
 
 ## All Error Handler
+
 ```
 app.all("*",(req : Request,res: Response)=> {
   res.status(400).json({
@@ -99,12 +113,26 @@ app.all("*",(req : Request,res: Response)=> {
 ```
 
 ## Prettier Install command
+
 ```
 npm install --save-dev prettier
 ```
 
-## Prettier command line format this line 
+## Prettier command line format this line
+
 ```
 npx prettier --write src/index.ts
 # src/index.ts 37ms
+```
+
+## Quary Sort()
+
+```
+https://mongoosejs.com/docs/api/query.html#Query.prototype.sort()
+```
+
+## Quary Select() // Field Limiting
+
+```
+https://mongoosejs.com/docs/api/query.html#Query.prototype.select()
 ```

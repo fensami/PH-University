@@ -4,60 +4,98 @@ import { TStudent } from './student.inderface';
 import mongoose from 'mongoose';
 import AppError from '../../errors/AappErrors';
 import { User } from '../user/user.model';
+import QueryBuilder from '../../builder/QueryBuilders';
+import { studentSearchAbleField } from './student.constant';
 
 
 
 // Get Student info from DB
 const getAllStudentsFromDB = async (query: Record<string, undefined>) => {
 
-  const queryObj = { ...query }
+  // const queryObj = { ...query } // copy
 
 
-  const studentSearchAbleField = ["email", "name.firstName", "name.middleName", "presentAddress"]
-  let searchTerm = '';
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string
-  }
+  // const studentSearchAbleField = ["email", "name.firstName", "name.middleName", "presentAddress"]
+  // let searchTerm = '';
+  // if (query?.searchTerm) {
+  //   searchTerm = query?.searchTerm as string
+  // }
 
-  const searchQuary = Student.find({
-    $or: studentSearchAbleField.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' }
-    }))
-  })
+  // const searchQuary = Student.find({
+  //   $or: studentSearchAbleField.map((field) => ({
+  //     [field]: { $regex: searchTerm, $options: 'i' }
+  //   }))
+  // })
 
   // filturing
-  const excludeFields = ['searchTerm', 'sort', 'limit']
+  // const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields']
 
-  excludeFields.forEach((el) => delete queryObj[el])
-  console.log({ query, queryObj });
-
-
-  const filtureQuary = searchQuary.find(queryObj).populate("admissionSemester")
-    .populate({
-      path: 'academicDeperment',
-      populate: {
-        path: "academicFaculty"
-      }
-    });
-
-  let sort = '-createdAt'
-  if (query.sort) {
-    sort = query.sort as string
-  }
-
-  const sortQuary = filtureQuary.sort(sort)
+  // excludeFields.forEach((el) => delete queryObj[el])
+  // console.log({ query }, { queryObj });
 
 
-  let limit = 1
-  if (query.limit) {
-    limit = query.limit
-  }
-
-  const limitQuary = await sortQuary.limit(limit)
+  // const filtureQuary = searchQuary.find(queryObj).populate("admissionSemester")
+  //   .populate({
+  //     path: 'academicDeperment',
+  //     populate: {
+  //       path: "academicFaculty"
+  //     }
+  //   });
 
 
 
-  return limitQuary;
+  // let sort = '-createdAt'
+  // if (query.sort) {
+  //   sort = query.sort as string
+  // }
+
+  // const sortQuary = filtureQuary.sort(sort)
+
+  // let page = 1;
+  // let limit = 1;
+  // let skip = 0;
+  // if (query.limit) {
+  //   limit = Number(query.limit)
+  // }
+  // if (query.page) {
+  //   page = Number(query.page);
+  //   skip = (page - 1) * limit
+  // }
+
+  // const paginateQuary = sortQuary.skip(skip)
+
+
+  // const limitQuary = paginateQuary.limit(limit)
+
+  // Field Limiting
+  // let fields = '-__v';
+  // if (query.fields) {
+  //   fields = (query.fields as string).split(',').join(' ')
+  //   console.log({ fields });
+
+  // }
+  //   const fieldQuary = await limitQuary.select(fields);
+
+
+  //   return fieldQuary;
+  // const filtureQuary = searchQuary.find(queryObj).populate("admissionSemester")
+  //   .populate({
+  //     path: 'academicDeperment',
+  //     populate: {
+  //       path: "academicFaculty"
+  //     }
+  //   });
+  const studentQuery = new QueryBuilder(Student.find().populate("admissionSemester").populate({
+    path: "academicDeperment",
+    populate: {
+      path: "academicFaculty"
+    }
+  }), query).search(studentSearchAbleField).filter().sort().paginate().fields()
+
+  const result = await studentQuery.modelQuery
+
+  return result
+
 };
 // Get signle Student info from DB
 const getSingleStudentsFromDB = async (id: string) => {
@@ -112,6 +150,7 @@ const deleteStudentFromDb = async (id: string) => {
 
 
   const session = await mongoose.startSession();
+
   try {
     session.startTransaction()
     const deletedStudent = await Student.findOneAndUpdate(
@@ -132,6 +171,8 @@ const deleteStudentFromDb = async (id: string) => {
     if (!deletedUser) {
       throw new AppError(404, "failed to deleted student")
     }
+
+
     await session.commitTransaction()
     await session.endSession()
 

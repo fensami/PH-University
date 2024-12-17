@@ -17,7 +17,48 @@ const createStudent = catchAsync(async (req, res,) => {
 
 })
 
+const createFaculty = catchAsync(async (req, res) => {
+    const { passsword, faculty: facultyData } = req.body;
+
+    const result = await UserService.createFacultyIntoDB(passsword, facultyData);
+
+    sendResponse(res, {
+        statusCode: 500,
+        success: true,
+        message: "faculty is created succesfully",
+        data: result
+    })
+})
+
+const createAdmin = catchAsync(async (req, res) => {
+    const { passsword, admin: adminData } = req.body;
+
+    const result = await UserService.createAdminIntoDB(passsword, adminData);
+
+    sendResponse(res, {
+        statusCode: 500,
+        success: true,
+        message: "Admin is created Succesfully",
+        data: result
+    })
+})
+const getAllUsers = catchAsync(async (req, res) => {
+    // const { passsword, admin: adminData } = req.body;
+
+    const result = await UserService.getAllUserFromDb(req.query);
+
+    sendResponse(res, {
+        statusCode: 500,
+        success: true,
+        message: "All Users Showing Succesfully",
+        data: result
+    })
+})
+
 
 export const userControllers = {
-    createStudent
+    createStudent,
+    createFaculty,
+    createAdmin,
+    getAllUsers
 }
